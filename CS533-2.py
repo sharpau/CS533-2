@@ -23,37 +23,52 @@ def bellman_backup(mdp, value_k, discount):
 
     return new_value_fn, actions
 
+def max_norm(new, old):
+    return max([new[i] - old[i] for i in range(0, len(new))])
 
-def plan(mdp, horizon):
+def plan(mdp, discount, epsilon):
     """
     Main algorithm. The input to your algorithm should be a description of an MDP and
     a time horizon H (positive integer). The output should be an optimal non-stationary value
     function and non-stationary policy for the MDP and time horizon .
     """
-
+    bellman_error = []
+    bellman_error.append(max(mdp.rewards))
     policy = []
-    discount = 0.9
+    iterations = 0
     # initialize at iteration 0 with reward of each state
     value_function = mdp.rewards
-    for i in range(horizon):
-        value_function, actions = bellman_backup(mdp, value_function, discount)
-        policy.append(actions)
-    # at this point value functions should be filled up to horizon
-    return value_function, policy
-
-
-def show_plan(values, policy):
-    """
-    Pretty printing for a plan returned by plan(mdp, horizon)
-    """
-    print "Value function from time-to-go 0 up to " + str(len(values) - 1)
-    for i in range(len(values)):
-        print values[i]
-    print "Policy from time-to-go 1 up to " + str(len(values) - 1)
-    for i in range(len(policy)):
-        print policy[i]
-
+    while bellman_error[len(bellman_error) - 1] > epsilon:
+        new_values, policy = bellman_backup(mdp, value_function, discount)
+        bellman_error.append(max_norm(new_values, value_function))
+        value_function = new_values
+        iterations += 1
+    # at this point we have the k-th value and policy
+    return value_function, policy, iterations
 
 # Main program flow.
-simple = MDP("simple.txt")
-simple.show()
+simple = MDP("simple_test.txt")
+
+
+val, pol, k = plan(simple, 0.99, 0.01)
+print "Value fn: " + str(val)
+print "Policy: " + str(pol)
+print "Iterations: " + str(k)
+
+
+val, pol, k = plan(simple, 0.9, 0.01)
+print "Value fn: " + str(val)
+print "Policy: " + str(pol)
+print "Iterations: " + str(k)
+
+
+val, pol, k = plan(simple, 0.5, 0.01)
+print "Value fn: " + str(val)
+print "Policy: " + str(pol)
+print "Iterations: " + str(k)
+
+
+val, pol, k = plan(simple, 0.1, 0.01)
+print "Value fn: " + str(val)
+print "Policy: " + str(pol)
+print "Iterations: " + str(k)
