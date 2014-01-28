@@ -12,7 +12,7 @@ class MDP(object):
             print str(self.transitions[i])
 
     def transition(self, start_state, action, end_state):
-        return self.transitions[action][start_state][end_state] # TODO should the last two params be swapped?
+        return self.transitions[action][start_state][end_state]
 
     def __init__(self, filename):
         self.name = filename

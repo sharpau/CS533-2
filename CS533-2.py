@@ -46,29 +46,75 @@ def plan(mdp, discount, epsilon):
     # at this point we have the k-th value and policy
     return value_function, policy, iterations
 
+def part_ii_test():
+    simple = MDP("simple_test.txt")
+
+    val, pol, k = plan(simple, 0.99, 0.01)
+    print "Value fn: " + str(val)
+    print "Policy: " + str(pol)
+    print "Iterations: " + str(k)
+
+
+    val, pol, k = plan(simple, 0.9, 0.01)
+    print "Value fn: " + str(val)
+    print "Policy: " + str(pol)
+    print "Iterations: " + str(k)
+
+
+    val, pol, k = plan(simple, 0.5, 0.01)
+    print "Value fn: " + str(val)
+    print "Policy: " + str(pol)
+    print "Iterations: " + str(k)
+
+
+    val, pol, k = plan(simple, 0.1, 0.01)
+    print "Value fn: " + str(val)
+    print "Policy: " + str(pol)
+    print "Iterations: " + str(k)
+
+
+def generate_parking_mdp(n, distance_rewards):
+    """
+    Given a size n and and n-length list of reward by distance (starting from the farthest spot and ending with the nearest),
+    generates an output file with the corresponding MDP.
+    """
+    assert(len(distance_rewards) == n)
+    num_actions = 2 # park, drive
+    rewards = []
+
+    # state organization. always drive from state j to j + 1, clockwise
+    for i in range(n - 1, -1, -1):  # n - 1, n - 2, ..., 0
+        # A[i], unoccupied, unparked = state 4i
+        rewards.append(-1)  # cost of time passing
+        # A[i], occupied, unparked = state 4i + 1
+        rewards.append(-1)  # cost of time passing
+        # A[i], occupied, parked = state 4i + 2
+        rewards.append(-101)  # cost of time passing + cost of crash
+        # A[i], unoccupied, parked = state 4i + 3
+        rewards.append(distance_rewards[i] - 1)  # reward for parking + cost of time passing
+    for i in range(n):  # 0, 1, 2, ..., n - 1
+        # B[i], unoccupied, unparked = state 4n + 4i
+        rewards.append(-1)  # cost of time passing
+        # B[i], occupied, unparked = state 4n + 4i + 1
+        rewards.append(-1)  # cost of time passing
+        # B[i], occupied, parked = state 4n + 4i + 2
+        rewards.append(-101)  # cost of time passing + cost of crash
+        # B[i], unoccupied, parked = state 4n + 4i + 3
+        rewards.append(distance_rewards[i] - 1)  # reward for parking + cost of time passing
+
+
+    transitions = [] # transitions[actions][startstate][endstate]
+
+    # initialize all transitions to empty - 8n states (2n spots * 2 for occupied/not * 2 for parked/not
+    for a in range(num_actions):
+        transitions.append([])
+        for i in range(n * 8):
+            transitions[len(transitions) - 1].append([0 for i in range(n * 8)])
+
+    t = 5
+    # assign actual values to the transition matrices
+
 # Main program flow.
-simple = MDP("simple_test.txt")
+#part_ii_test()
 
-
-val, pol, k = plan(simple, 0.99, 0.01)
-print "Value fn: " + str(val)
-print "Policy: " + str(pol)
-print "Iterations: " + str(k)
-
-
-val, pol, k = plan(simple, 0.9, 0.01)
-print "Value fn: " + str(val)
-print "Policy: " + str(pol)
-print "Iterations: " + str(k)
-
-
-val, pol, k = plan(simple, 0.5, 0.01)
-print "Value fn: " + str(val)
-print "Policy: " + str(pol)
-print "Iterations: " + str(k)
-
-
-val, pol, k = plan(simple, 0.1, 0.01)
-print "Value fn: " + str(val)
-print "Policy: " + str(pol)
-print "Iterations: " + str(k)
+parking_2 = MDP(2, [1, 3])
