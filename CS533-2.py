@@ -75,11 +75,11 @@ def part_ii_test():
 
 def generate_parking_mdp(n, distance_rewards):
     """
-    Given a size n and and n-length list of reward by distance (starting from the farthest spot and ending with the nearest),
+    Given a size n and and n-length list of reward by distance (starting from the nearest spot and ending with the farthest),
     generates an output file with the corresponding MDP.
     """
     assert(len(distance_rewards) == n)
-    num_actions = 2 # park, drive
+    num_actions = 2  # drive, park
     rewards = []
 
     # state organization. always drive from state j to j + 1, clockwise
@@ -89,7 +89,7 @@ def generate_parking_mdp(n, distance_rewards):
         # A[i], occupied, unparked = state 4i + 1
         rewards.append(-1)  # cost of time passing
         # A[i], occupied, parked = state 4i + 2
-        rewards.append(-101)  # cost of time passing + cost of crash
+        rewards.append(distance_rewards[i] - 101)  # cost of time passing + cost of crash
         # A[i], unoccupied, parked = state 4i + 3
         rewards.append(distance_rewards[i] - 1)  # reward for parking + cost of time passing
     for i in range(n):  # 0, 1, 2, ..., n - 1
@@ -98,23 +98,73 @@ def generate_parking_mdp(n, distance_rewards):
         # B[i], occupied, unparked = state 4n + 4i + 1
         rewards.append(-1)  # cost of time passing
         # B[i], occupied, parked = state 4n + 4i + 2
-        rewards.append(-101)  # cost of time passing + cost of crash
+        rewards.append(distance_rewards[i] - 101)  # cost of time passing + cost of crash
         # B[i], unoccupied, parked = state 4n + 4i + 3
         rewards.append(distance_rewards[i] - 1)  # reward for parking + cost of time passing
+    rewards.append(0)  # sink state
+    rewards[0] -= 50  # for parking in handicapped
+    rewards[4 * n] -= 50  # for parking in handicapped
+    b_offset = 4 * n
 
+    transitions = []  # transitions[actions][start state][end state]
 
-    transitions = [] # transitions[actions][startstate][endstate]
-
-    # initialize all transitions to empty - 8n states (2n spots * 2 for occupied/not * 2 for parked/not
+    # initialize all transitions to empty - 8n + 1 states (2n spots * 2 for occupied/not * 2 for parked/not + 1 terminal)
     for a in range(num_actions):
         transitions.append([])
-        for i in range(n * 8):
-            transitions[len(transitions) - 1].append([0 for i in range(n * 8)])
+        for i in range((n * 8) + 1):
+            transitions[len(transitions) - 1].append([0 for i in range(n * 8 + 1)])
 
-    t = 5
     # assign actual values to the transition matrices
+    # drive action
+    # if state is parked, go to terminal state
+    # otherwise, move to next state occupied with p, move to next state unoccupied with p-1 (swapped for B[])
+    transitions[0][n * 8][n * 8] = 1.0  # if terminal, stay terminal
+    for i in range(n):
+        # probability of spot A[i+1] being open, or B[i+1] being taken
+        if i == n - 1: # same probability repeated, both top spots are equal
+            p = 1.0 / (i + 2.0)
+        else:
+            p = 1.0 / (i + 3.0)
+
+        # row A, higher i = closer
+        # transitions from unoccupied, unparked, state 4i
+        transitions[0][4 * i][4 * (i + 1)] = p  # probability of next spot being open
+        transitions[0][4 * i][4 * (i + 1) + 1] = 1.0 - p  # probably next spot is occupied
+        # transitions from occupied, unparked, state 4i + 1... same as above
+        transitions[0][4 * i + 1][4 * (i + 1)] = p  # probability of next spot being open
+        transitions[0][4 * i + 1][4 * (i + 1) + 1] = 1.0 - p  # probably next spot is occupied
+        # transitions from parked states always go to terminal state
+        transitions[0][4 * i + 2][n * 8] = 1.0
+        transitions[0][4 * i + 3][n * 8] = 1.0
+
+        # row B, higher i = farther
+        if i == n - 1:  # last spot, must wrap around
+            p = 1.0 / (n - i + 1)
+            # transitions from unoccupied, unparked, state 4i
+            transitions[0][b_offset + 4 * i][0] = p  # probability of next spot being open
+            transitions[0][b_offset + 4 * i][1] = 1.0 - p  # probably next spot is occupied
+            # transitions from occupied, unparked, state 4i + 1... same as above
+            transitions[0][b_offset + 4 * i + 1][0] = p  # probability of next spot being open
+            transitions[0][b_offset + 4 * i + 1][1] = 1.0 - p  # probably next spot is occupied
+        else:
+            p = 1.0 / (n - i)
+            # transitions from unoccupied, unparked, state 4i
+            transitions[0][b_offset + 4 * i][b_offset + 4 * (i + 1)] = p  # probability of next spot being open
+            transitions[0][b_offset + 4 * i][b_offset + 4 * (i + 1) + 1] = 1.0 - p  # probably next spot is occupied
+            # transitions from occupied, unparked, state 4i + 1... same as above
+            transitions[0][b_offset + 4 * i + 1][b_offset + 4 * (i + 1)] = p  # probability of next spot being open
+            transitions[0][b_offset + 4 * i + 1][b_offset + 4 * (i + 1) + 1] = 1.0 - p  # probably next spot is occupied
+
+        # transitions from parked states always go to terminal state
+        transitions[0][b_offset + 4 * i + 2][n * 8] = 1.0
+        transitions[0][b_offset + 4 * i + 3][n * 8] = 1.0
+
+    # park action
+    transitions[1][n * 8][n * 8] = 1.0  # if terminal, stay terminal
+    # if state is parked, go to terminal state
+    # else park
 
 # Main program flow.
 #part_ii_test()
 
-parking_2 = MDP(2, [1, 3])
+generate_parking_mdp(4, [10, 5, 3, 1])
