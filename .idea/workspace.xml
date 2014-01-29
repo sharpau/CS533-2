@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="075f54a6-7136-4107-9c92-b949a46753af" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CS533-2.py" afterPath="$PROJECT_DIR$/CS533-2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/parking_mdp_n_4.txt" afterPath="$PROJECT_DIR$/parking_mdp_n_4.txt" />
     </list>
     <ignored path="CS533-2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,45 +25,28 @@
     <favorites_list name="CS533-2" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="CS533-2.py" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/CS533-2.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="206" column="0" selection-start="9087" selection-end="9087" vertical-scroll-proportion="0.76937985" vertical-offset="3105" max-vertical-offset="3621">
-                  <folding>
-                    <element signature="e#75#90#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="pydevd.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="1142" column="0" selection-start="47510" selection-end="47510" vertical-scroll-proportion="0.0" vertical-offset="18120" max-vertical-offset="25024">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="mdp.py" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/mdp.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="35" column="57" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.67863894" vertical-offset="236" max-vertical-offset="765">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="CS533-2.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CS533-2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="209" column="0" selection-start="9239" selection-end="9239" vertical-scroll-proportion="0.8071834" vertical-offset="3126" max-vertical-offset="3655">
+              <folding>
+                <element signature="e#75#90#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mdp.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mdp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="57" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -367,7 +351,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/CS533-2.py</url>
-          <line>203</line>
+          <line>205</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
@@ -426,14 +410,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mdp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="57" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.67863894" vertical-offset="236" max-vertical-offset="765">
+        <state line="35" column="57" selection-start="1345" selection-end="1345" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CS533-2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="206" column="0" selection-start="9087" selection-end="9087" vertical-scroll-proportion="0.76937985" vertical-offset="3105" max-vertical-offset="3621">
+        <state line="209" column="0" selection-start="9239" selection-end="9239" vertical-scroll-proportion="0.8071834" vertical-offset="3126" max-vertical-offset="3655">
           <folding>
             <element signature="e#75#90#0" expanded="true" />
           </folding>

@@ -102,8 +102,10 @@ def generate_parking_mdp(n, distance_rewards):
         # B[i], unoccupied, parked = state 4n + 4i + 3
         rewards.append(distance_rewards[i] - 1)  # reward for parking + cost of time passing
     rewards.append(0)  # sink state
-    rewards[0] -= 50  # for parking in handicapped
-    rewards[4 * n] -= 50  # for parking in handicapped
+    rewards[4 * n - 1] -= 50  # for parking in handicapped A[1]
+    rewards[4 * n - 2] -= 50  # for parking in handicapped A[1]
+    rewards[4 * n + 2] -= 50  # for parking in handicapped B[1]
+    rewards[4 * n + 3] -= 50  # for parking in handicapped B[1]
     b_offset = 4 * n
 
     transitions = []  # transitions[actions][start state][end state]
@@ -194,7 +196,7 @@ def generate_parking_mdp(n, distance_rewards):
 # Main program flow.
 #part_ii_test()
 
-generate_parking_mdp(4, [10, 5, 3, 1])
+generate_parking_mdp(4, [20, 10, 5, 1])
 
 size4 = MDP("parking_mdp_n_4.txt")
 
