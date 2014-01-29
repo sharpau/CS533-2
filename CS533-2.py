@@ -73,7 +73,7 @@ def part_ii_test():
     print "Iterations: " + str(k)
 
 
-def generate_parking_mdp(n, distance_rewards):
+def generate_parking_mdp(n, distance_rewards, name):
     """
     Given a size n and and n-length list of reward by distance (starting from the nearest spot and ending with the farthest),
     generates an output file with the corresponding MDP.
@@ -183,7 +183,7 @@ def generate_parking_mdp(n, distance_rewards):
         transitions[1][b_offset + 4 * i + 3][n * 8] = 1.0
 
     # write everything out to file
-    with open("parking_mdp_n_" + str(n) + ".txt", "w") as out_file:
+    with open(name + ".txt", "w") as out_file:
         out_file.write(str(8 * n + 1) + "\n")
         out_file.write(str(num_actions) + "\n")
         out_file.write(" ".join([str(x) for x in rewards]))
@@ -193,17 +193,41 @@ def generate_parking_mdp(n, distance_rewards):
             out_file.write("\n")
 
 
+def part_iii_test():
+    generate_parking_mdp(10, [40, 36, 32, 28, 24, 20, 16, 12, 8, 4], "parking_mdp_linear_rewards_n_10")
+    linear_10 = MDP("parking_mdp_linear_rewards_n_10.txt")
+
+    val, pol, k = plan(linear_10, 0.99, 0.01)
+    print "Rewards: " + str(linear_10.rewards)
+    print "Value fn: " + str(val)
+    print "Policy: " + str(pol)
+    print "Iterations: " + str(k)
+    with open("linear_10_results.csv", "w") as out_file:
+        for i in range(linear_10.num_states):
+            out_file.write("(" + str(linear_10.rewards[i]) + ";" + str(val[i]) + ";" + str(pol[i]) + "),")
+            if (i + 1) % 4 == 0:
+                out_file.write("\n")
+
+
+    generate_parking_mdp(10, [50, 40, 32, 24, 18, 12, 8, 4, 2, 0], "parking_mdp_quad_rewards_n_10")
+    quad_10 = MDP("parking_mdp_quad_rewards_n_10.txt")
+
+    val, pol, k = plan(quad_10, 0.99, 0.01)
+    print "Rewards: " + str(quad_10.rewards)
+    print "Value fn: " + str(val)
+    print "Policy: " + str(pol)
+    print "Iterations: " + str(k)
+    with open("quad_10_results.csv", "w") as out_file:
+        for i in range(quad_10.num_states):
+            out_file.write("(" + str(quad_10.rewards[i]) + ";" + str(val[i]) + ";" + str(pol[i]) + "),")
+            if (i + 1) % 4 == 0:
+                out_file.write("\n")
+
 # Main program flow.
 #part_ii_test()
 
-generate_parking_mdp(4, [20, 10, 5, 1])
+part_iii_test()
 
-size4 = MDP("parking_mdp_n_4.txt")
-
-val, pol, k = plan(size4, 0.9, 0.01)
-print "Value fn: " + str(val)
-print "Policy: " + str(pol)
-print "Iterations: " + str(k)
 
 
 
