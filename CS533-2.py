@@ -161,10 +161,47 @@ def generate_parking_mdp(n, distance_rewards):
 
     # park action
     transitions[1][n * 8][n * 8] = 1.0  # if terminal, stay terminal
-    # if state is parked, go to terminal state
-    # else park
+    for i in range(n):
+        # row A, higher i = closer
+        # transitions from unoccupied, unparked, state 4i
+        transitions[1][4 * i][4 * i + 3] = 1.0  # parking in unoccupied
+        # transitions from occupied, unparked, state 4i + 1... same as above
+        transitions[1][4 * i + 1][4 * i + 2] = 1.0  # parking in occupied...ouch
+        # transitions from parked states always go to terminal state
+        transitions[1][4 * i + 2][n * 8] = 1.0
+        transitions[1][4 * i + 3][n * 8] = 1.0
+
+        # row B, higher i = farther
+        # transitions from unoccupied, unparked, state 4i
+        transitions[1][b_offset + 4 * i][b_offset + 4 * i + 3] = 1.0  # parking in unoccupied
+        # transitions from occupied, unparked, state 4i + 1... same as above
+        transitions[1][b_offset + 4 * i + 1][b_offset + 4 * i + 2] = 1.0  # parking in occupied...ouch
+        # transitions from parked states always go to terminal state
+        transitions[1][b_offset + 4 * i + 2][n * 8] = 1.0
+        transitions[1][b_offset + 4 * i + 3][n * 8] = 1.0
+
+    # write everything out to file
+    with open("parking_mdp_n_" + str(n) + ".txt", "w") as out_file:
+        out_file.write(str(8 * n + 1) + "\n")
+        out_file.write(str(num_actions) + "\n")
+        out_file.write(" ".join([str(x) for x in rewards]))
+        out_file.write("\n")
+        for a in range(num_actions):
+            out_file.write("\n".join([" ".join([str(cell) for cell in line]) for line in transitions[a]]))
+            out_file.write("\n")
+
 
 # Main program flow.
 #part_ii_test()
 
 generate_parking_mdp(4, [10, 5, 3, 1])
+
+size4 = MDP("parking_mdp_n_4.txt")
+
+val, pol, k = plan(size4, 0.9, 0.01)
+print "Value fn: " + str(val)
+print "Policy: " + str(pol)
+print "Iterations: " + str(k)
+
+
+
